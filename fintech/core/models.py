@@ -1,8 +1,20 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-class Student(models.Model):
-    name = models.CharField(max_length=100)
-    # Add other student details as needed
+from .managers import BeksarUserManager
+
+class Student(AbstractUser):
+    email = models.EmailField(_("email"), unique=True, db_index=True)
+    username = None
+    phone_number = models.CharField(_("Phone number"), max_length=32, blank=True)
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ("first_name", "last_name")
+
+    objects = BeksarUserManager()
+
+    def __str__(self) -> str:
+        return self.get_full_name() or self.email or self.phone_number
 
 class Transaction(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
