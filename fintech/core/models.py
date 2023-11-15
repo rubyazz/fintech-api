@@ -22,6 +22,9 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=10, choices=[('income', 'Income'), ('outcome', 'Outcome')])
     date = models.DateField()
 
+    def __str__(self):
+        return f"{self.amount} for {self.student}"
+
 class EducationalCredit(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -37,7 +40,13 @@ class News(models.Model):
     content = models.TextField()
     pub_date = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
 class Course(models.Model):
     title = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     installment_available = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
